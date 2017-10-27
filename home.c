@@ -3,53 +3,94 @@
 #include <string.h>
 #include <ctype.h>
 
+#define MAX_NODES 10
+typedef unsigned long ULONG;
+
+FILE *f;
+
+// String handling by strtok_r()
+char *str, *path,*strPath, *spPath, *token;
+char *saveptr;
+int i, j;
+
+// String fetched by getline()
+char *line = NULL;
+size_t len = 0;
+ssize_t read;
+
+char *trimwhitespace(char *str);
+
+typedef struct _NODE{
+  char *pszName; // Name of the node
+  ULONG ulIntVal; // If numeric type, the value itself
+  char *pszString; // String pointer or NULL if numeric
+  struct _NODE *pnNodes[MAX_NODES]; //Pointers to the nodes
+} NODE;
+
 void main (void){
+  
+  //Root node.
+  NODE *root;
 
-  FILE *f;
+  //Traversing node pointer
+  NODE *conductor;
 
-  // String handling by strtok_r()
-  char *str1, *str2, *token, *subtoken;
-  char *saveptr1, *saveptr2;
-  int i;
-
-  char *token_trimmed;
-
-  // String fetched by getline()
-  char *line = NULL;
-  size_t len = 0;
-  ssize_t read;
-
-  char *trimwhitespace(char *str);
+  root = malloc( sizeof(NODE) );
+  
 
   //Open file, read only
   f = fopen("data.txt", "r");
     if (f == NULL)
       exit(EXIT_FAILURE);
-  // Read it, string by string.
-  // getline() returns ssize_t
-  // Puts string in line field. 
+
+    // Read it, string by string.
+    // getline() returns ssize_t
+    // Puts string in line field. 
     while((read = getline(&line, &len, f)) != -1) {
     
-      //printf("Retrieved line of length %zu :\n", read);
-      //printf("%s", line);
-      
       //Parsing here
-      //Split with '='  
-      for (i = 0, str1 = line; ; i++, str1 = NULL) {
+      for (i = 0, str = line; ; i++, str = NULL) {
       
-        token = strtok_r(str1, "=", &saveptr1);
+        token = strtok_r(str, "=", &saveptr);
         if(token == NULL)
           break;
         
         //Trim string whitespace (around '=')
         token = trimwhitespace(token);
 
-        //Print to test
-        printf("%d: %s\n", i, token);
+        //Find left side of '='
+        if(i == 0){
+          //Create/traverse nodes.
 
-      //  for(str2 = token; ; str2 = NULL)
+          for (j = 0, path = token; ; j++, path = NULL){
+            strPath = strtok_r(path, ".", &spPath);
+            if(strPath == NULL)
+              break;
+
+            // Move conductor.
+            // If j == 0, set conductor at root;
+
+//            if(j == 0)
+//            conductor = root;
+
+            // Check if node allready exists.
+
+
+
+            //Testing
+            printf("Node%d: %s\n", j, strPath);
+
+          }
+        
+        }
+        //Find right side of '='.
+        else if(i == 1){
+          //Check if string or int
+          //Conductor is at correct place. 
+        }
+        //Print to test
+        //printf("%d: %s\n", i, token);
       }
-      
     }
 
 
@@ -72,7 +113,7 @@ char *trimwhitespace(char *str)
   if(*str == 0) // All spaces?
     return str;
 
-  // Trim trailing space
+  //Trim trailing space
   end = str + strlen(str) -1;
   while(end > str && isspace((unsigned char)*end)) end--;
 
