@@ -2,16 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#define MAX_NODES 10
-typedef unsigned long ULONG;
+#include "node.h"
+#include <stddef.h>
 
 FILE *f;
 
 // String handling by strtok_r()
 char *str, *path,*strPath, *spPath, *token;
 char *saveptr;
-int i, j;
+int i, j, k, result;
 
 // String fetched by getline()
 char *line = NULL;
@@ -20,21 +19,8 @@ ssize_t read;
 
 char *trimwhitespace(char *str);
 
-typedef struct _NODE{
-  char *pszName; // Name of the node
-  ULONG ulIntVal; // If numeric type, the value itself
-  char *pszString; // String pointer or NULL if numeric
-  struct _NODE *pnNodes[MAX_NODES]; //Pointers to the nodes
-} NODE;
-
-void main (void){
+int main (void){
   
-  //Root node.
-  NODE *root;
-
-  //Traversing node pointer
-  NODE *conductor;
-
   root = malloc( sizeof(NODE) );
   
 
@@ -60,26 +46,57 @@ void main (void){
 
         //Find left side of '='
         if(i == 0){
-          //Create/traverse nodes.
 
+          //Create/traverse nodes.
+          //When this for loop is finished, the conductor is
+          //set to the last node specified.
           for (j = 0, path = token; ; j++, path = NULL){
             strPath = strtok_r(path, ".", &spPath);
             if(strPath == NULL)
               break;
 
             // Move conductor.
-            // If j == 0, set conductor at root;
+            // If j == 0, move conductor to root;
 
-//            if(j == 0)
-//            conductor = root;
+            if(j == 0)
+            conductor = root;
 
-            // Check if node allready exists.
+            // Move conductor, create new nodes on the way if needed.
+            // Send it the name of the next level.
+            result = moveconductor(strPath);
 
+            switch(result){
+            
+              case 1 : 
+                // Node has been found and conductor has moved to it.
+                printf("Node '%s' has been found and conductor has moved to it.\n", strPath);
+                break;
 
+              case 2 :
+                // Max number or nodes allowed reached. 
+                // Do something else
+                printf("Max number of nodes allowed at this level reached.\n");
+                break;
+
+              case 3 :
+                // Node was not found, created a new one with name given.
+                printf("Node '%s' was not found, created it.\n", strPath);
+                break;
+
+              case 4 :
+                // No child-nodes at all at this level.
+                // Created a new one with name given.
+                printf("No childnodes, created '%s'.\n", strPath);
+                break;
+
+              default : 
+                // Sum ting wong.
+                printf("Default... whatever that means...\n");
+                break;
+            }
 
             //Testing
-            printf("Node%d: %s\n", j, strPath);
-
+            // printf("Node%d: %s\n", j, strPath);
           }
         
         }
@@ -87,18 +104,19 @@ void main (void){
         else if(i == 1){
           //Check if string or int
           //Conductor is at correct place. 
+          
         }
         //Print to test
         //printf("%d: %s\n", i, token);
       }
     }
 
-
   // Close file and linebuffer
   free(line);
   fclose(f);
 
-  exit(EXIT_SUCCESS);
+  //exit(EXIT_SUCCESS);
+  return 0;
 }
 
 
