@@ -104,10 +104,21 @@ int main (void){
         else if(i == 1){
           //Check if string or int
           //Conductor is at correct place. 
-          
+          //Check if right side is in quotation marks.  
+
+
         }
-        //Print to test
-        //printf("%d: %s\n", i, token);
+         /*
+         *  Nodetree has been buildt. Now print it out.  
+         */ 
+        
+        // Move conductor to the beginning of the tree. 
+        conductor = root;  
+
+        // Check if either int or string is not NULL. 
+        // Print out names of children. 
+
+
       }
     }
 
