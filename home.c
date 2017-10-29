@@ -94,33 +94,34 @@ int main (void){
                 printf("Default... whatever that means...\n");
                 break;
             }
+          }// END parse left side of '='
+        }// END find left side of '='
 
-            //Testing
-            // printf("Node%d: %s\n", j, strPath);
-          }
-        
-        }
         //Find right side of '='.
         else if(i == 1){
           //Check if string or int
           //Conductor is at correct place. 
           //Check if right side is in quotation marks.  
 
-
-        }
-         /*
-         *  Nodetree has been buildt. Now print it out.  
-         */ 
-        
-        // Move conductor to the beginning of the tree. 
-        conductor = root;  
-
-        // Check if either int or string is not NULL. 
-        // Print out names of children. 
+        } // END else if 
+      } // END 
+    } // END while getline()
 
 
-      }
-    }
+    printtree();
+     /*
+     *  Nodetree has been built. Now print it out.  
+     *  Try to use a recursive function for this. 
+     */ 
+    
+    // Move conductor to the beginning of the tree. 
+   // conductor = root;  
+
+    // Check if either int or string is not NULL. 
+    // If both are NULL, it's a folder.
+
+    // Print out names of children. 
+    // Save the children. 
 
   // Close file and linebuffer
   free(line);

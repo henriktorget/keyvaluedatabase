@@ -3,6 +3,8 @@
 
 #define MAX_NODES 10
 
+#include <stdio.h>
+
 typedef unsigned long ULONG;
 
 typedef struct _NODE{
@@ -20,5 +22,7 @@ NODE *conductor;
 
 
 int moveconductor(char *strPath);
+
+int printtree();
 
 #endif //__HEADER_H_

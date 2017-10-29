@@ -74,4 +74,12 @@ int moveconductor(char *strPath){
   return 0;
 }
 
-//#endif
+int printtree(){
+
+
+  printf("Recursive tree-printing-function-algoritm.\n");
+
+  return 1;
+  
+}
+
