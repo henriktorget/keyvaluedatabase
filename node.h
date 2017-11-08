@@ -4,25 +4,47 @@
 #define MAX_NODES 10
 
 #include <stdio.h>
+#include <stdlib.h>
+
 
 typedef unsigned long ULONG;
 
 typedef struct _NODE{
-  char *pszName;    // Name of the node.
-  ULONG ulIntVal;   // If numeric type, the value it self.
-  char *pszString;  // String pointer or NULL if numeric.
-  struct _NODE *pnNodes[MAX_NODES]; //Pointers to the nodes
+  char *pszName; // Name of the node.
+  struct _NODE *pnNodes[MAX_NODES]; // Pointers to the nodes.
 } NODE;
 
-//Root node
-NODE *root;
-
-//Traversing node pointer
-NODE *conductor;
+// Root node
+//NODE *root = (NODE*) malloc(sizeof(NODE));
 
 
-int moveconductor(char *strPath);
+//Traversing node 'cursor'
+//NODE *conductor;
 
-int printtree();
+// Checks if child exists in given node. 
+int childexists(NODE* node, char* childname);
 
-#endif //__HEADER_H_
+//Checks if there is 
+//int fullofchildren(NODE* node);
+
+// This function return pointer to child with name nodename.
+// If the child is null.  
+NODE* findnode(char *nodename);
+
+//Move conductor to this existin node. 
+//NODE* moveconductor(nodename);
+
+//Create child at given node. Return new node. 
+NODE* createnode(NODE* node, char* childname);
+
+//Recursive print function
+
+void printnodetree(NODE* rootprint);
+
+//Frees memory from node specified. 
+void freetree(NODE* rootfree);
+
+// Create two nodes in roots array. Print them. 
+void nodetest();
+
+#endif //__NODE_H__

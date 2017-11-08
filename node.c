@@ -1,85 +1,123 @@
+#include "node.h"
 #include <string.h>
 #include <stdlib.h>
-#include "node.h"
 
-int emptynodes;
-int k, j;
+int childexists(NODE* node, char* childname){
+  
+  int strcmpVal;
+  char* namecheck;
 
+  int emptycount;
 
-//Looks for nodename given and moves conductor to that place.
-//
-//Return 1 if node has been found, and conductor is at correct place.
-//Return 2 if no more room for nodes at this level.  
-//Return 3 if node was not found, so it created a new one with name given. 
-//Return 4 if there was no nodes avaliable, so it created a new one at [0] with given name.
+  for(int i = 0; i < MAX_NODES; i++){
+ 
+    //printf("i = %d\n", i);
+    // Check if  
+    if(node->pnNodes[i] != 0){
+      namecheck = node->pnNodes[i]->pszName;
+      printf("Childexists(): node->pnNodes[%i]->pszName = %s\n", i, namecheck);
+ 
+      printf("namecheck = %s, childname = %s ", 
+          namecheck, childname);
+      strcmpVal = strcmp(namecheck, childname);
+  
+      printf("strcmpVal: %d\n", strcmpVal);
 
-int moveconductor(char *strPath){
-
-
-  //Iterate through next nodes.
-  for (k = 0, emptynodes = 0; k < MAX_NODES; k++){
-
-    //If it does'nt exist, don't check it.
-    if(conductor->pnNodes[k] != 0){
+      if(strcmpVal == 0)
+          return i;
     
-      //Compare names of nodes in next layer of nodes.
-      if(strcmp(conductor->pnNodes[k]->pszName, strPath) == 0){
-      
-        //Found node, move conductor.
-        conductor = conductor->pnNodes[k];
-        return 1;
-      }
-    } else { 
-      // Count number of empty slots for nodes. 
-      emptynodes++; 
+    }
+    else{
+      emptycount++;
     }
 
-  }
-
-  //Nodearray is full. Do something else.  
-  if(emptynodes == 0){
-
-    return 2;
+    //if(strcmp(namecheck, childname) == 0)
+    //  return i;
   
   }
 
-  //There are no nodes in the array. Put it at the first place in array.
-
-  if(emptynodes == MAX_NODES){
-  
-    conductor->pnNodes[0] = malloc(sizeof(NODE));
-    conductor = conductor->pnNodes[0];
-    conductor->pszName = strPath;
-
-    return 4;
+  //printf("emptycount = %d \n", emptycount);
+  //  All nodepointers are empty.
+  if(emptycount == MAX_NODES){
+    return -1;
+  } else if(emptycount == 0){
+    // All nodepointers are full.
+    return -3;
   }
+  // If it went through all nonempty childnodes and there is room for a new one
+    return -2;
+}
 
-  // If there are nodes in the array but its not full, 
-  // find fisrt NULL pointer and create a new one there. 
-  
-  for (j = 0; j < MAX_NODES; j++){
-  
+NODE* createnode(NODE* node, char* childname){
+printf("Createnode()\n");
+  for(int k = 0; k < MAX_NODES; k++){
+    if(node->pnNodes[k] == 0){
+      
+      node->pnNodes[k] = (NODE*) malloc(sizeof(NODE));
 
-    if(conductor->pnNodes[j] == 0){
-    
- 
-      conductor->pnNodes[j] = malloc(sizeof(NODE));
-      conductor = conductor->pnNodes[j];
-      conductor->pszName = strPath;
+      for (int x = 0; x < MAX_NODES; x++){
+      
+        //node->pnNodes[k]->pnNodes[x] = (NODE*) malloc(sizeof(NODE));
+        //node->pnNodes[k]->pnNodes[x] = 0;
+      
+      }
+      node->pnNodes[k]->pszName = childname;
 
-      return 3;
-
+      return node->pnNodes[k];
     }
   }
   return 0;
 }
 
-int printtree(){
+void printnodetree(NODE* rootprint){
+
+printf("%s\n", rootprint->pnNodes[0]->pszName);
+
+printf("%s\n", rootprint->pnNodes[0]->pnNodes[0]->pszName);
 
 
-  printf("Recursive tree-printing-function-algoritm.\n");
+/*
+  if(rootprint == 0)
+    return;
 
-  return 1;
-  
+  for(int l = 0; l < 1; l++){
+    if(rootprint->pnNodes[l] != 0){
+    printnodetree(rootprint->pnNodes[l]);
+    printf("%s ", rootprint->pnNodes[l]->pszName);
+    }
+  }
+*/
 }
 
+void freetree(NODE* rootfree){
+
+  if (rootfree == 0)
+    return;
+  
+  for(int i = 0; i < MAX_NODES; i++){
+    freetree(rootfree->pnNodes[i]);
+    free(rootfree);
+  }
+
+}
+
+/*
+void nodetest(){
+
+//root = malloc(sizeof(NODE));
+//root->pszName = "root";
+
+//root->pnNodes[0] = malloc(sizeof(NODE));
+//root->pnNodes[1] = malloc(sizeof(NODE));
+
+//root->pnNodes[0]->pszName = "firstchild";
+//root->pnNodes[1]->pszName = "secondchild";
+
+printf("%s and %s are children of %s\n", 
+    root->pnNodes[0]->pszName,
+    root->pnNodes[1]->pszName,
+    root->pszName);
+
+}
+
+*/

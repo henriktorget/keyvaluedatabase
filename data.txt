@@ -1,11 +1,4 @@
-strings.no.header = "Oppdatering"
-strings.no.text = "Oppdater programvaren"
-strings.no.button_cancel = "Avbryt"
-strings.en.header = "Updating"
-strings.en.txt = "Update your software"
-strings.en.button_ok = "Ok"
-strings.en.button_cancel = "Cancel"
-config.loglevel = 1
-config.update.interval = 32
-config.update.server1 = "http://www.aspenberg.no/"
-config.update.timeout = 20
+first.one = "hey"
+first.two = "yes"
+second.one = "mhm"
+third.two = "yup"
