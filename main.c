@@ -16,13 +16,13 @@ char *line = 0;
 size_t len = 0;
 ssize_t read;
 
-NODE *root = (NODE*) malloc(sizeof(NODE));
+NODE *root;
+
 NODE *conductor;
 
 int main(void){
 
-  //root = 0;
-  //root = (NODE*) malloc(sizeof(NODE));
+  root = (NODE*) malloc(sizeof(NODE));
   root->pszName = (char*) "root";
 
   for(int z = 0; z < MAX_NODES; z++){
@@ -46,23 +46,25 @@ int main(void){
       // Trim string whitespace around '='
       token = trimwhitespace(token);
 
-      printf("token: %s\n", token);
+      //printf("\ntoken: %s\n", token);
 
       // Token is on the left side of '='
       if(i == 0){
 
+        printf("\n\tLeft side of '='\n");
         // Traverse list of nodes based on name.
         // When this loop is finished, the conductor is set to the last node in
         // 'token'
         for(j = 0, path = token; ; j++, path = 0){
-        
+          
+       printf("j: %d | ", j); 
           //If this is the first time this for loop runs,
           //it should start at root. 
-          if(j == 0)
+          if(j == 0){
             conductor = root;
+            //printf("This should be root :%s\n", conductor->pszName);
+          }
 
-          //printf("%s\n", token);
-          
           nodename = strtok_r(path, ".", &saveptr2);
 
 
@@ -70,12 +72,12 @@ int main(void){
           if(nodename == 0)
             break;
 
-          printf("nodename = %s\n", nodename);
+          printf("nodename: %s | ", nodename);
           
           // See if child exists, returns where in array.
-          nodecheck = childexists(conductor, nodename);
+          nodecheck = childexists((NODE*) conductor, nodename);
 
-          printf("nodecheck = %d\n", nodecheck);
+          printf("nodecheck: %d |\n", nodecheck);
           if(nodecheck >= 0 ){
           
             // Node exists return position in array.
@@ -108,7 +110,7 @@ int main(void){
      
         //nodearg = token;
 
-          printf("We are now on the left siden of '='");
+          printf("\tRight side of '='\n");
         
           // Check if nodearg is in quotationmarks.
 

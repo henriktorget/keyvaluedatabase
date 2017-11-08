@@ -15,9 +15,9 @@ int childexists(NODE* node, char* childname){
     // Check if  
     if(node->pnNodes[i] != 0){
       namecheck = node->pnNodes[i]->pszName;
-      printf("Childexists(): node->pnNodes[%i]->pszName = %s\n", i, namecheck);
+      printf("\nChildexists(): node->pnNodes[%i]->pszName = %s\n", i, namecheck);
  
-      printf("namecheck = %s, childname = %s ", 
+      printf("namecheck = %s, childname = %s\n ", 
           namecheck, childname);
       strcmpVal = strcmp(namecheck, childname);
   
@@ -49,11 +49,15 @@ int childexists(NODE* node, char* childname){
 }
 
 NODE* createnode(NODE* node, char* childname){
-printf("Createnode()\n");
+printf("Createnode(%s, %s)\n", node->pszName, childname);
   for(int k = 0; k < MAX_NODES; k++){
     if(node->pnNodes[k] == 0){
       
-      node->pnNodes[k] = (NODE*) malloc(sizeof(NODE));
+      NODE* childnode = (NODE*) malloc(sizeof(NODE));
+      childnode->pszName = (char*) malloc(sizeof(childname));
+      childnode->pszName = childname;
+
+      node->pnNodes[k] = childnode;
 
       for (int x = 0; x < MAX_NODES; x++){
       
@@ -61,9 +65,12 @@ printf("Createnode()\n");
         //node->pnNodes[k]->pnNodes[x] = 0;
       
       }
-      node->pnNodes[k]->pszName = childname;
 
-      return node->pnNodes[k];
+
+
+      printf("Node name is: %s\n", node->pnNodes[k]->pszName);
+
+      return  node->pnNodes[k];
     }
   }
   return 0;
