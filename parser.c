@@ -1,6 +1,29 @@
 #include "parser.h"
 #include <string.h>
 
+char** splitInPeriod(char* str){
+
+  char* parsestring = str;
+  //printf("Test: %s", str):
+  int number = 0;
+
+  while(strtok_r(parsestring, ".", &saveptr) != 0)
+    number++;
+  
+
+  char** sub_str = (char**) malloc(number * sizeof(char*));
+
+  for (int i = 0; i < number; i++){
+    parsetoken = strtok_r(str, ".", &saveptr);
+    sub_str[i] = (char*) malloc(sizeof(parsetoken));
+  
+  }
+
+  arrayLength = number;
+  return sub_str;
+
+}
+
 char *trimwhitespace(char *str){
 
   char *end;

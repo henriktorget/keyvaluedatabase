@@ -9,17 +9,18 @@ int childexists(NODE* node, char* childname){
 
   int emptycount;
 
+
   for(int i = 0; i < MAX_NODES; i++){
  
     //printf("i = %d\n", i);
     // Check if  
     if(node->pnNodes[i] != 0){
       namecheck = node->pnNodes[i]->pszName;
-      printf("\nChildexists(): node->pnNodes[%i]->pszName = %s\n", i, namecheck);
+      printf("\nChildexists(): %s->pnNodes[%i]->pszName = %s\n", node->pszName, i, namecheck);
  
-      printf("namecheck = %s, childname = %s\n ", 
-          namecheck, childname);
-      strcmpVal = strcmp(namecheck, childname);
+      printf("name = %s, childname = %s\n ", 
+          node->pnNodes[i]->pszName, childname);
+      strcmpVal = strcmp(node->pnNodes[i]->pszName, childname);
   
       printf("strcmpVal: %d\n", strcmpVal);
 

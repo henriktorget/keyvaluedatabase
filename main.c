@@ -10,6 +10,8 @@ char *str, *token, *path, *nodearg, *nodename;
 
 char *saveptr1, *saveptr2;
 
+char **folders;
+
 int i, j, nodecheck;
 
 char *line = 0;
@@ -19,6 +21,9 @@ ssize_t read;
 NODE *root;
 
 NODE *conductor;
+
+
+int extern arrayLength;
 
 int main(void){
 
@@ -52,11 +57,27 @@ int main(void){
       if(i == 0){
 
         printf("\n\tLeft side of '='\n");
+        
+        //folders = splitInPeriod(token);
+
+
+
+
+        
+        
         // Traverse list of nodes based on name.
         // When this loop is finished, the conductor is set to the last node in
         // 'token'
         for(j = 0, path = token; ; j++, path = 0){
           
+
+          nodename = strtok_r(path, ".", &saveptr2);
+
+
+          // No more directions left in token. 
+          if(nodename == 0)
+            break;
+
        printf("j: %d | ", j); 
           //If this is the first time this for loop runs,
           //it should start at root. 
@@ -65,12 +86,6 @@ int main(void){
             //printf("This should be root :%s\n", conductor->pszName);
           }
 
-          nodename = strtok_r(path, ".", &saveptr2);
-
-
-          // No more directions left in token. 
-          if(nodename == 0)
-            break;
 
           printf("nodename: %s | ", nodename);
           
@@ -104,7 +119,7 @@ int main(void){
                 conductor->pszName);
                 
         } 
-
+      
 
       } else if( i == 1){
      
