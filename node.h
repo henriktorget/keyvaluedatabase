@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 typedef unsigned long ULONG;
 
 typedef struct _NODE{
@@ -20,12 +19,19 @@ typedef struct _NODE{
     struct _NODE *pnNodes[MAX_NODES]; // Pointers to the nodes.
 } NODE;
 
-// Root node
-//NODE *root = (NODE*) malloc(sizeof(NODE));
+
+FILE *f;
+char  *str, *token, *path, *nodename, *nodearg, *saveptr;
+
+int i, j, nodecheck, type;
+
+char *line;
+
+NODE *root;
+
+NODE *conductor;
 
 
-//Traversing node 'cursor'
-//NODE *conductor;
 
 void createNodeTree(char* filenname);
 
@@ -39,17 +45,17 @@ int childexists(NODE* node, char* childname);
 // If the child is null.
 NODE* findnode(char *nodename);
 
-//Move conductor to this existin node.
-//NODE* moveconductor(nodename);
-
 //Create child at given node. Return new node.
 NODE* createnode(NODE* node, char* childname);
 
 //Sets number to given node.
-void setNumber(NODE* node, int number);
+void setNumber(NODE* node, ULONG number);
 
 //Sets string to given node.
 void setString(NODE* node, char* str);
+
+//Get wether node stores string or int.
+int GetType(char* string);
 
 //Recursive print function
 

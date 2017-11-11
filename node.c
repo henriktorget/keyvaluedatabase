@@ -3,10 +3,148 @@
 //
 
 #include "node.h"
-#include <string.h>
+#include "parser.h"
 
 void createNodeTree(char* filename)
 {
+    // Create initial root node, name it.
+    root = (NODE*) malloc(sizeof(NODE));
+    root->pszName = (char*) "root";
+
+    size_t len = 0;
+    ssize_t read;
+
+    // Open file read only
+    f = fopen("data.txt", "r");
+    if (f == 0)
+        exit(EXIT_FAILURE);
+
+    // Read it string by string.
+    while((read = getline(&line, &len, f)) != -1) {
+
+
+        str = line;
+
+
+        for(i = 0, token = strtok(0, "="); ; i++, str = 0){
+
+            // Break lines up into commands and parameters by splitting at '='.
+
+            token = strtok(str, "=");
+
+            if(token == 0)
+                break;
+
+            // Trim string whitespace around '='
+
+            token = trimwhitespace(token);
+
+            // Token is on the left side of '='
+            if(i == 0){
+                //printf("%s.", token);
+
+                //printf("\n\tLeft side of '='\n");
+
+                // Traverse list of nodes based on name.
+                // When this loop is finished, the conductor is set to the last node in
+                // 'token'
+
+                //path = calloc(1, sizeof(token));
+                //strcpy(path, token);
+
+                //path = token;
+
+                for(j = 0, path = token; ; j++, path = 0){
+
+
+                    nodename = strtok_r(path, ".", &saveptr);
+
+                    //printf("path %s\n", path);
+
+                    // No more directions left in token.
+                    if(nodename == 0)
+                        break;
+
+                    //printf("nodename %s\n", nodename);
+                    //If this is the first time this for loop runs,
+                    //it should start at root.
+                    if(j == 0){
+                        conductor = root;
+                    }
+
+                    // See if child exists, returns position where in array if it does.
+                    // If number is negative it needs to do things accordingly.
+                    nodecheck = childexists(conductor, nodename);
+
+                    if(nodecheck >= 0 ){
+
+                        // Node exists return position in array.
+                        conductor = conductor->pnNodes[nodecheck];
+
+                    } else if(nodecheck == -1){
+                        // All nodepointers are empty. Create a new one.
+                        //printf("Node '%s' not found in '%s', creating it.\n", nodename,
+                        //        conductor->pszName);
+
+                        conductor = createnode(conductor, nodename);
+
+                    } else if(nodecheck == -2){
+                        //Cant find node. Create new node. With name. Move conductor to it.
+                        conductor = createnode(conductor, nodename);
+
+                    } else if(nodecheck == -3)
+
+                        //Child does not exist. Node is full..
+                        printf("Node '%s' is full of children. You should turn some of them in for adoption.",
+                               conductor->pszName);
+
+                }
+
+
+            } else if( i == 1){
+
+                // At this point, the conductor is positioned at a leaf.
+
+                //printf("\n\tRight side of '='\n");
+
+                nodearg = calloc(1, sizeof(token));
+                strcpy(nodearg, token);
+
+                //printf("%s\n", nodearg);
+
+                // Check if nodearg is in quotationmarks. Returns 1 if number, returns 0 if string.
+                type = isNumber(nodearg);
+
+                if(type == 1) {
+                    //printf("Is number\n");
+                    ULONG ulong = (ULONG) atoi(nodearg);
+                    setNumber(conductor, ulong);
+                    //printf("Number is stored as: %lu \n", conductor->ulIntVal);
+
+                }
+                else if(type == 0) {
+
+                    //printf("Is string\n");
+                    setString(conductor, nodearg);
+                    //printf("String is stored as: %s\n", conductor->pszString);
+                }
+
+                else
+                    printf("Whoooops");
+
+            } else {
+                printf("Error: Sum-ting wong.");
+                exit(EXIT_FAILURE);
+            }
+
+        } // end for each line
+    } // end of while read getline()
+
+
+    free(str);
+    free(line);
+
+    fclose(f);
 
 }
 
@@ -63,10 +201,13 @@ NODE* createnode(NODE* node, char* childname){
     for(int k = 0; k < MAX_NODES; k++){
         if(node->pnNodes[k] == 0){
 
+            //Allocate/create new node.
             NODE* childnode = (NODE*) malloc(sizeof(NODE));
+            //Make room for name.
             childnode->pszName = malloc(sizeof(childname));
-            childnode->pszName = childname;
-
+            //Move name.
+            strcpy(childnode->pszName, childname);
+            //Place at free position.
             node->pnNodes[k] = childnode;
 
             return  node->pnNodes[k];
@@ -75,10 +216,10 @@ NODE* createnode(NODE* node, char* childname){
     return 0;
 }
 
-void setNumber(NODE* node, int number)
+void setNumber(NODE* node, ULONG number)
 {
 
-    node->ulIntVal = (ULONG) number;
+    node->ulIntVal = number;
 
 }
 
@@ -90,6 +231,47 @@ void setString(NODE* node, char* str)
 
     node->pszString = nodestring;
 
+}
+
+int GetType(char* string)
+{
+    char *nodenames, *savert, *parsers;
+    int nodepos;
+
+
+    conductor = root;
+
+    parsers = malloc(sizeof(string));
+    strcpy(parsers, string);
+
+    for(int m = 0; ; m++, parsers = 0)
+    {
+
+        nodenames = strtok_r(parsers, ".", &savert);
+
+        if(nodenames == 0)
+            break;
+
+        nodepos = childexists(conductor, nodenames);
+
+        if(nodepos >= 0){
+            conductor = conductor->pnNodes[nodepos];
+            printf("Conductor: %s\n", conductor->pszName);
+        } else if (nodename < 0) {
+            printf("Nodepos returned %d\n", nodepos);
+        }
+    }
+
+    printf("Int = %lu \n", conductor->ulIntVal);
+    printf("String = %s \n", conductor->pszString);
+
+    if(conductor->ulIntVal != 0)
+        return 1;
+
+    else if(conductor->pszString != 0)
+        return 0;
+    else
+        return -1;
 }
 
 void printnodetree(NODE* rootprint){
