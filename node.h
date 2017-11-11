@@ -15,6 +15,8 @@ typedef unsigned long ULONG;
 
 typedef struct _NODE{
     char *pszName; // Name of the node.
+    ULONG ulIntVal; // If numeric type, the value itself.
+    char *pszString; // String pointer og NULL if numeric.
     struct _NODE *pnNodes[MAX_NODES]; // Pointers to the nodes.
 } NODE;
 
@@ -24,6 +26,8 @@ typedef struct _NODE{
 
 //Traversing node 'cursor'
 //NODE *conductor;
+
+void createNodeTree(char* filenname);
 
 // Checks if child exists in given node.
 int childexists(NODE* node, char* childname);
@@ -40,6 +44,12 @@ NODE* findnode(char *nodename);
 
 //Create child at given node. Return new node.
 NODE* createnode(NODE* node, char* childname);
+
+//Sets number to given node.
+void setNumber(NODE* node, int number);
+
+//Sets string to given node.
+void setString(NODE* node, char* str);
 
 //Recursive print function
 

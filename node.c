@@ -5,55 +5,61 @@
 #include "node.h"
 #include <string.h>
 
-int childexists(NODE* node, char* childname){
+void createNodeTree(char* filename)
+{
+
+}
+
+int childexists(NODE* node, char* childname)
+{
 
     int strcmpVal;
-    char* namecheck;
+    int emptycount = 0;
 
-    int emptycount;
+    for(int k = 0; k < MAX_NODES; k++){
 
+        // Check if there is a node at this posistion.
+        if(node->pnNodes[k] != 0) {
 
-    for(int i = 0; i < MAX_NODES; i++){
+            // Compare name of node with the node you are looking for.
+            strcmpVal = strcmp(node->pnNodes[k]->pszName, childname);
 
-        //printf("i = %d\n", i);
-        // Check if
-        if(node->pnNodes[i] != 0){
-            namecheck = node->pnNodes[i]->pszName;
-            printf("\nChildexists(): %s->pnNodes[%i]->pszName = %s\n", node->pszName, i, namecheck);
-
-            printf("name = %s, childname = %s\n ",
-                   node->pnNodes[i]->pszName, childname);
-            strcmpVal = strcmp(node->pnNodes[i]->pszName, childname);
-
-            printf("strcmpVal: %d\n", strcmpVal);
-
-            if(strcmpVal == 0)
-                return i;
+            //When it finds a node with the correct name. Return the position to it in the array.
+            if (strcmpVal == 0)
+                return k;
 
         }
-        else{
+
+        else {
+            // If there's an empty node in the given node. Count it.
             emptycount++;
         }
 
-        //if(strcmp(namecheck, childname) == 0)
-        //  return i;
-
     }
 
-    //printf("emptycount = %d \n", emptycount);
-    //  All nodepointers are empty.
     if(emptycount == MAX_NODES){
+
+        // All nodes are empty,
         return -1;
-    } else if(emptycount == 0){
+
+    } else if(emptycount < MAX_NODES){
+
+        // If it went through all nonempty childnodes and there is room for a new one.
+        return -2;
+
+    } else if(emptycount == 0) {
+
         // All nodepointers are full.
         return -3;
+
     }
-    // If it went through all nonempty childnodes and there is room for a new one
-    return -2;
+
+    // Sum-ting wong.
+    return -4;
 }
 
 NODE* createnode(NODE* node, char* childname){
-    printf("Createnode(%s, %s)\n", node->pszName, childname);
+
     for(int k = 0; k < MAX_NODES; k++){
         if(node->pnNodes[k] == 0){
 
@@ -63,36 +69,42 @@ NODE* createnode(NODE* node, char* childname){
 
             node->pnNodes[k] = childnode;
 
-            for (int x = 0; x < MAX_NODES; x++){
-
-                //node->pnNodes[k]->pnNodes[x] = (NODE*) malloc(sizeof(NODE));
-                //node->pnNodes[k]->pnNodes[x] = 0;
-
-            }
-
-
-
-            printf("Node name is: %s\n", node->pnNodes[k]->pszName);
-
             return  node->pnNodes[k];
         }
     }
     return 0;
 }
 
+void setNumber(NODE* node, int number)
+{
+
+    node->ulIntVal = (ULONG) number;
+
+}
+
+void setString(NODE* node, char* str)
+{
+    char *nodestring;
+
+    strcpy(nodestring, str);
+
+    node->pszString = nodestring;
+
+}
+
 void printnodetree(NODE* rootprint){
 
-    //printf("%s\n", rootprint->pnNodes[0]->pszName);
-
-    //printf("%s\n", rootprint->pnNodes[0]->pnNodes[0]->pszName);
-
-  if(rootprint == 0)
-    return;
 
   for(int l = 0; l < MAX_NODES; l++){
+
     if(rootprint->pnNodes[l] != 0){
-    printnodetree(rootprint->pnNodes[l]);
-    printf("%s ", rootprint->pnNodes[l]->pszName);
+
+        printf("%s ", rootprint->pnNodes[l]->pszName);
+        printnodetree(rootprint->pnNodes[l]);
+
+    } else {
+        //printf("\n");
+        return;
     }
   }
 

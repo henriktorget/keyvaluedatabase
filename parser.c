@@ -30,7 +30,7 @@ char** splitInPeriod(char* str){
 
 }
 */
-char *trimwhitespace(char *str){
+char* trimwhitespace(char *str){
 
     char *end;
 
@@ -45,8 +45,20 @@ char *trimwhitespace(char *str){
     while(end > str && isspace((unsigned char)*end)) end--;
 
     //Write a null terminator
-    *(end+1) = 0;
+    *(end+1) = '\0';
 
     return str;
 
 }
+
+int isNumber(char* str){
+
+    if(isdigit((unsigned char)*str))
+    {
+        return 1;
+    }
+
+return 0;
+
+}
+

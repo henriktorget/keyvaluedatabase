@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-char *parsetoken, *saveptr;
+//char *parsetoken, *saveptr;
 
 // Splits string in two by '=', returns array.
 //char** splitinequals(char* str);
@@ -19,5 +19,8 @@ char** splitInPeriod(char* str);
 
 // Removes whitespaces from each side of string.
 char *trimwhitespace(char* str);
+
+// Checks wether a string is surrounded by quotationmarks or not.
+int isNumber(char* str);
 
 #endif //KEYVALUE_PARSER_H
