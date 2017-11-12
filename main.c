@@ -3,8 +3,6 @@
 //
 
 #include "node.h"
-#include "parser.h"
-#include <string.h>
 
 int main(void){
 
@@ -27,7 +25,7 @@ int main(void){
            GetString("strings.no.button_cancel"));
 
     printf("\tGetInt(): %d\n",
-           GetInt("config.update.timeout"));
+           GetInt("config.update.interval"));
 
     printf("\n");
 
@@ -37,7 +35,11 @@ int main(void){
 
     printf("\tEnumerate(): \n");
 
-    //Enumerate("config.*");
+    Enumerate("config.update.*");
+
+    Enumerate("strings.no.*");
+
+    Enumerate("strings.en.*");
 
     //Enumerate("strings.no.*");
 
@@ -49,11 +51,9 @@ int main(void){
 
     printf("\tDelete(): ");
 
-    moveconductor("config.update.interval");
-
-    Delete(conductor);
-
     moveconductor("config.update");
+
+    Delete("interval");
 
     int ret = childexists(conductor, "interval");
 
@@ -92,12 +92,12 @@ int main(void){
 
     printf("\nString: %s\n", GetString("strings.en.header"));
 
-
+*/
     printnodetree(root);
-    */
+
 
     // Free allocated space.
-    freetree(root);
+    Delete("root");
 
 
     exit(EXIT_SUCCESS);

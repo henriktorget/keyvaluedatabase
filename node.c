@@ -26,11 +26,13 @@ void createNodeTree(char* filename)
         str = line;
 
 
-        for(i = 0, token = strtok(0, "="); ; i++, str = 0){
 
+//        for( i = 0, token = strtok(0, "="); ; i++, str = 0){
+
+        for( i = 0, token = str; ; i++, str = 0){
             // Break lines up into commands and parameters by splitting at '='.
 
-            token = strtok(str, "=");
+            token = strtok_r(str, "=", &saveptr2);
 
             if(token == 0)
                 break;
@@ -117,7 +119,10 @@ void createNodeTree(char* filename)
 
                 if(type == 1) {
                     //printf("Is number\n");
-                    ULONG ulong = (ULONG) atoi(nodearg);
+
+                    ULONG ulong = strtoul(nodearg, 0, 10);
+
+                    //printf("%lu", ulong);
                     setNumber(conductor, ulong);
                     //printf("Number is stored as: %lu \n", conductor->ulIntVal);
 
@@ -290,9 +295,21 @@ NODE* createnode(NODE* node, char* childname){
     return 0;
 }
 
-void Delete(NODE* node){
-    node = 0;
-    freetree(node);
+
+void Delete(char* nodename){
+
+    if(strcmp(nodename,(char*) "root") != 0){
+        conductor = root;
+    }
+
+    int childpos = childexists(conductor, nodename);
+
+    if (!is_empty(conductor)) {
+        if (childpos >= 0) {
+            free(conductor->pnNodes[childpos]);
+            conductor->pnNodes[childpos] = 0;
+        }
+    }
 
 }
 
@@ -396,16 +413,18 @@ void Enumerate(char* str){
         if (HasType(conductor) == 0) {
 
             for(int i = 0; i < MAX_NODES; i++) {
-                if(conductor->pnNodes[i] != 0)
+                if (conductor->pnNodes[i] != 0) {
                     printf("%s: ", conductor->pnNodes[i]->pszName);
 
-                if (conductor->pnNodes[i]->pszString != 0) {
+                    if (conductor->pnNodes[i]->pszString != 0) {
 
-                    printf("%s\n", conductor->pnNodes[i]->pszString);
+                        printf("%s\n", conductor->pnNodes[i]->pszString);
 
-                } else if (conductor->pnNodes[i]->ulIntVal != 0) {
+                    } else if (conductor->pnNodes[i]->ulIntVal != 0) {
 
-                printf("%lu\n", conductor->pnNodes[i]->ulIntVal);
+                        printf("%lu\n", conductor->pnNodes[i]->ulIntVal);
+
+                    }
 
                 }
 
@@ -455,14 +474,15 @@ void printnodetree(NODE* rootprint){
 
 }
 
-void freetree(NODE* rootfree){
+/*
+void Delete(NODE* rootfree){
 
     if (rootfree == 0)
         return;
 
     for(int i = 0; i < MAX_NODES; i++) {
         if(rootfree->pnNodes[i] != 0) {
-            freetree(rootfree->pnNodes[i]);
+            Delete(rootfree->pnNodes[i]);
         }
     }
 
@@ -470,7 +490,7 @@ void freetree(NODE* rootfree){
     rootfree = 0;
 
 
-}
+}*/
 
 /*
 void nodetest(){

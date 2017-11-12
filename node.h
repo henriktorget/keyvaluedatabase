@@ -21,7 +21,7 @@ typedef struct _NODE{
 
 
 FILE *f;
-char  *str, *token, *path, *nodename, *nodearg, *saveptr;
+char  *str, *token, *path, *nodename, *nodearg, *saveptr, *saveptr2;
 
 int i, j, nodecheck, type;
 
@@ -59,7 +59,7 @@ int moveone(char* str);
 NODE* createnode(NODE* node, char* childname);
 
 // Deletes node with children.
-void Delete(NODE* node);
+void Delete(char* nodename);
 
 //Sets number to given node.
 void setNumber(NODE* node, ULONG number);
@@ -89,7 +89,7 @@ char* GetText(char* string, char* lang);
 void printnodetree(NODE* rootprint);
 
 //Frees memory from node specified.
-void freetree(NODE* rootfree);
+//void freetree(NODE* rootfree);
 
 // Create two nodes in roots array. Print them.
 void nodetest();
