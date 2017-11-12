@@ -1,5 +1,5 @@
 //
-// Created by henrik on 11/10/17.
+// Created by henrik
 //
 
 #ifndef KEYVALUE_PARSER_H
@@ -10,19 +10,13 @@
 
 #include <string.h>
 
-
-//char *parsetoken, *saveptr;
-
-// Splits string in two by '=', returns array.
-//char** splitinequals(char* str);
-
 // Splits string in array of words divided by '.'
 char** splitInPeriod(char* str);
 
 // Removes whitespaces from each side of string.
 char *trimwhitespace(char* str);
 
-// Checks wether a string is surrounded by quotationmarks or not.
+// Checks wether a string is a number or not.
 int isNumber(char* str);
 
 #endif //KEYVALUE_PARSER_H

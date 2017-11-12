@@ -1,5 +1,5 @@
 //
-// Created by henrik on 11/10/17.
+// Created by henrik
 //
 
 #ifndef KEYVALUE_NODE_H
@@ -90,6 +90,8 @@ void printnodetree(NODE* rootprint);
 
 //Frees memory from node specified.
 //void freetree(NODE* rootfree);
+
+void DeleteChildren(NODE* rootfree);
 
 // Create two nodes in roots array. Print them.
 void nodetest();

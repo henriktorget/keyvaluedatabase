@@ -1,5 +1,5 @@
 //
-// Created by henrik on 11/10/17.
+// Created by henrik
 //
 
 #include "node.h"
@@ -43,31 +43,20 @@ void createNodeTree(char* filename)
 
             // Token is on the left side of '='
             if(i == 0){
-                //printf("%s.", token);
-
-                //printf("\n\tLeft side of '='\n");
 
                 // Traverse list of nodes based on name.
                 // When this loop is finished, the conductor is set to the last node in
                 // 'token'
-
-                //path = calloc(1, sizeof(token));
-                //strcpy(path, token);
-
-                //path = token;
 
                 for(j = 0, path = token; ; j++, path = 0){
 
 
                     nodename = strtok_r(path, ".", &saveptr);
 
-                    //printf("path %s\n", path);
-
                     // No more directions left in token.
                     if(nodename == 0)
                         break;
 
-                    //printf("nodename %s\n", nodename);
                     //If this is the first time this for loop runs,
                     //it should start at root.
                     if(j == 0){
@@ -94,61 +83,59 @@ void createNodeTree(char* filename)
                         //Cant find node. Create new node. With name. Move conductor to it.
                         conductor = createnode(conductor, nodename);
 
-                    } else if(nodecheck == -3)
+                    } else if(nodecheck == -3) {
 
                         //Child does not exist. Node is full..
-                        printf("Node '%s' is full of children. You should turn some of them in for adoption.",
+                        printf("Node '%s' is full of children. You should turn some of them up for adoption.",
                                conductor->pszName);
+                        exit(EXIT_FAILURE);
+
+                    }
 
                 }
 
 
             } else if( i == 1){
 
-                // At this point, the conductor is positioned at a leaf.
-
-                //printf("\n\tRight side of '='\n");
+                // At this point, the conductor is positioned at a leaf, ready to assign values.
 
                 nodearg = calloc(1, sizeof(token));
                 strcpy(nodearg, token);
 
-                //printf("%s\n", nodearg);
-
-                // Check if nodearg is in quotationmarks. Returns 1 if number, returns 0 if string.
+                // Check if nodearg is a number. Returns 1 if number, returns 0 if string.
                 type = isNumber(nodearg);
 
                 if(type == 1) {
-                    //printf("Is number\n");
 
+                    // String to ULONG
                     ULONG ulong = strtoul(nodearg, 0, 10);
 
-                    //printf("%lu", ulong);
                     setNumber(conductor, ulong);
-                    //printf("Number is stored as: %lu \n", conductor->ulIntVal);
 
                 }
                 else if(type == 0) {
 
-                    //printf("Is string\n");
                     setString(conductor, nodearg);
-                    //printf("String is stored as: %s\n", conductor->pszString);
+
                 }
 
                 else
-                    printf("Whoooops");
+                    printf("Value is considered neither string or numeric.\n");
 
             } else {
-                printf("Error: Sum-ting wong.");
+                printf("Parsing error. More than one '='?\n");
                 exit(EXIT_FAILURE);
             }
 
         } // end for each line
+
     } // end of while read getline()
 
 
     free(str);
     free(line);
 
+    // Done with file. Close it.
     fclose(f);
 
 }
@@ -171,36 +158,35 @@ int childexists(NODE* node, char* childname)
             if (strcmpVal == 0)
                 return k;
 
-        }
-
-        else {
+        } else {
             // If there's an empty node in the given node. Count it.
             emptycount++;
         }
 
     }
-/*
-    if(emptycount == MAX_NODES){
 
-        // All nodes are empty,
+
+    if(emptycount == MAX_NODES) {
+        // All nodes are empty
         return -1;
 
-    }*/
+    } else if(emptycount == 0){
 
-    if(is_empty(node)) {
-        return -1;
+        return -3;
+
     }
     else if(emptycount < MAX_NODES){
 
         // If it went through all nonempty childnodes and there is room for a new one.
         return -2;
 
-    } else if(emptycount == 0) {
+    }
+    //else if(emptycount == 0) {
 
         // All nodepointers are full.
-        return -3;
+      //  return -3;
 
-    }
+    //}
 
     // Sum-ting wong.
     return -4;
@@ -298,18 +284,34 @@ NODE* createnode(NODE* node, char* childname){
 
 void Delete(char* nodename){
 
-    if(strcmp(nodename,(char*) "root") != 0){
+    if(strcmp(nodename, (char*) "root") == 0){
         conductor = root;
+        DeleteChildren(root);
+        root = 0;
+        return;
     }
 
     int childpos = childexists(conductor, nodename);
 
+    if(childpos >= 0){
+        free(conductor->pnNodes[childpos]);
+
+    }
+
+    if(!is_empty(conductor->pnNodes[childpos])){
+        DeleteChildren(conductor->pnNodes[childpos]);
+    } else{
+        //free(conductor->pnNodes[childpos]);
+        conductor->pnNodes[childpos] = 0;
+    }
+
+    /*
     if (!is_empty(conductor)) {
         if (childpos >= 0) {
             free(conductor->pnNodes[childpos]);
             conductor->pnNodes[childpos] = 0;
         }
-    }
+    }*/
 
 }
 
@@ -474,23 +476,20 @@ void printnodetree(NODE* rootprint){
 
 }
 
-/*
-void Delete(NODE* rootfree){
+
+void DeleteChildren(NODE* rootfree) {
 
     if (rootfree == 0)
         return;
 
-    for(int i = 0; i < MAX_NODES; i++) {
-        if(rootfree->pnNodes[i] != 0) {
-            Delete(rootfree->pnNodes[i]);
+    for (int i = 0; i < MAX_NODES; i++) {
+        if (rootfree->pnNodes[i] != 0) {
+            DeleteChildren(rootfree->pnNodes[i]);
+            free(rootfree->pnNodes[i]);
+            rootfree->pnNodes[i] = 0;
         }
     }
-
-    free(rootfree);
-    rootfree = 0;
-
-
-}*/
+}
 
 /*
 void nodetest(){

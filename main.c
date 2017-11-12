@@ -1,10 +1,17 @@
 //
-// Created by henrik on 11/10/17.
+// Skrevet av Henrik Torget
+// Eksamen i programmering i c på linux.
+// Jeg har valgt å bruke lønsning B.
 //
 
 #include "node.h"
 
 int main(void){
+
+/**
+ *  Jeg har laget eksempler med alle funnksjoner som er i oppgaven.
+ *  
+ */
 
     // Del 1:
 
@@ -35,11 +42,9 @@ int main(void){
 
     printf("\tEnumerate(): \n");
 
-    Enumerate("config.update.*");
+    Enumerate("config.*");
 
-    Enumerate("strings.no.*");
-
-    Enumerate("strings.en.*");
+    //Enumerate("strings.en.*");
 
     //Enumerate("strings.no.*");
 
@@ -72,33 +77,12 @@ int main(void){
             ,GetText("button_cancel", "no"));
     printf("\tGetText(): %s\n"
             ,GetText("button_cancel", "en"));
-/*
-    printf("%d\n", typeis);
 
-    typeis = GetType("strings.no.button_cancel");
-
-    printf("%d\n", typeis);
-
-     */
-
-    //printf("\nGetText(): %s\n", GetText("button_cancel", "no"));
-
-    /*
-    moveconductor("strings.en.header");
-    printf("\n%s\n", conductor->pszName);
-
-    int integer = GetInt("config.update.timeout");
-    printf("\n%d!!!\n", integer);
-
-    printf("\nString: %s\n", GetString("strings.en.header"));
-
-*/
-    printnodetree(root);
-
+    //Lists folders
+    //printnodetree(root);
 
     // Free allocated space.
     Delete("root");
-
 
     exit(EXIT_SUCCESS);
 }
