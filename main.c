@@ -19,6 +19,8 @@ int main(void){
 
     createNodeTree("data.txt");
 
+    printnodetree(root);
+
     printf("\tSo far so good...\n\n");
 
     // Del 2:
