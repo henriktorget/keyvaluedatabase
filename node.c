@@ -98,8 +98,7 @@ void CreateNodeTree(char* filename)
             } else if( i == 1){
 
                 // At this point, the conductor is positioned at a leaf, ready to assign values.
-
-                nodearg = calloc(1, sizeof(token));
+                nodearg = malloc(strlen(token) * sizeof(char)+1);
                 strcpy(nodearg, token);
 
                 // Check if nodearg is a number. Returns 1 if number, returns 0 if string.
@@ -328,8 +327,12 @@ void SetNumber(NODE* node, ULONG number)
 void SetString(NODE* node, char* str)
 {
     char *nodestring;
+    nodestring = malloc(strlen(str) * sizeof(char)+1);
+
+    //memcpy(nodestring, str, strlen(str) + 1);
 
     strcpy(nodestring, str);
+    //printf("\n%zd\n", strlen(nodestring));
 
     node->pszString = nodestring;
 

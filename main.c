@@ -1,5 +1,5 @@
 //
-// Skrevet av Henrik Torget
+//      Skrevet av Henrik Torget
 // Eksamen i programmering i c på linux.
 // Jeg har valgt å bruke lønsning B.
 //
@@ -10,7 +10,8 @@ int main(void){
 
 /**
  *  Jeg har laget eksempler med alle funnksjoner som er i oppgaven.
- *  Kjør CreateNodeTree() med egene filnavn om du har tester.
+ *  Kjør CreateNodeTree() med egene tekstfiler om du har tester
+ *  liggende så lenge du legger de på samme sted som data.txt.
  */
 
     // Del 1:
@@ -25,7 +26,7 @@ int main(void){
 
     printf("Del 2:\n");
 
-    printf("\tGetType(): %d.\n",
+    printf("\tGetType(): %d\n",
            GetType("config.update.interval"));
 
     printf("\tGetString(): %s\n",
@@ -42,9 +43,9 @@ int main(void){
 
     printf("\tEnumerate(): \n");
 
-    //Enumerate("config.*");
+    Enumerate("config.update.*");
 
-    Enumerate("strings.en.*");
+    //Enumerate("strings.en.*");
 
     //Enumerate("strings.no.*");
 
@@ -78,8 +79,8 @@ int main(void){
     printf("\tGetText(): %s\n"
             ,GetText("button_cancel", "en"));
 
-    //Lists folders
-    PrintNodeTree(root);
+    //List to visualize if nodes has been deleted.
+    //PrintNodeTree(root);
 
     // Free allocated space.
     Delete("root");

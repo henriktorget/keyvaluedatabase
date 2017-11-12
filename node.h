@@ -81,9 +81,7 @@ char* GetText(char* string, char* lang);
 //Recursive print function
 void PrintNodeTree(NODE* rootprint);
 
-//Frees memory from node specified.
-//void freetree(NODE* rootfree);
-
+// Function used by Delete() to recursively delete all cildnodes.
 void DeleteChildren(NODE* rootfree);
 
 #endif //KEYVALUE_NODE_H
