@@ -8,7 +8,8 @@
 void CreateNodeTree(char* filename)
 {
     // Create initial root node, name it.
-    root = (NODE*) malloc(sizeof(NODE));
+    root = (NODE*) calloc(1,sizeof(NODE));
+    root->pszName = calloc(1, 4 * sizeof(char)+1);
     root->pszName = (char*) "root";
 
     size_t len = 0;
@@ -22,12 +23,7 @@ void CreateNodeTree(char* filename)
     // Read it string by string.
     while((read = getline(&line, &len, f)) != -1) {
 
-
         str = line;
-
-
-
-//        for( i = 0, token = strtok(0, "="); ; i++, str = 0){
 
         for( i = 0, token = str; ; i++, str = 0){
             // Break lines up into commands and parameters by splitting at '='.
@@ -74,8 +70,6 @@ void CreateNodeTree(char* filename)
 
                     } else if(nodecheck == -1){
                         // All nodepointers are empty. Create a new one.
-                        //printf("Node '%s' not found in '%s', creating it.\n", nodename,
-                        //        conductor->pszName);
 
                         conductor = CreateNode(conductor, nodename);
 
@@ -98,7 +92,7 @@ void CreateNodeTree(char* filename)
             } else if( i == 1){
 
                 // At this point, the conductor is positioned at a leaf, ready to assign values.
-                nodearg = malloc(strlen(token) * sizeof(char)+1);
+                nodearg = calloc(1, strlen(token) * sizeof(char)+1);
                 strcpy(nodearg, token);
 
                 // Check if nodearg is a number. Returns 1 if number, returns 0 if string.
@@ -142,7 +136,7 @@ void CreateNodeTree(char* filename)
 int ChildExists(NODE* node, char* childname)
 {
 
-    int strcmpVal;
+    int strcmpVal = 0;
     int emptycount = 0;
 
     for(int k = 0; k < MAX_NODES; k++){
@@ -180,12 +174,6 @@ int ChildExists(NODE* node, char* childname)
         return -2;
 
     }
-    //else if(emptycount == 0) {
-
-        // All nodepointers are full.
-      //  return -3;
-
-    //}
 
     // Sum-ting wong.
     return -4;
@@ -232,12 +220,12 @@ int IsEmpty(NODE* node){
 int MoveConductor(char* str){
 
     char *nodename, *savept, *parser;
-    int nodepos;
-
+    int nodepos = 0;
 
     conductor = root;
 
-    parser = malloc(strlen(str) * sizeof(char) +1);
+    parser = calloc(1, strlen(str) * sizeof(char) + 1);
+    //strncpy(parser, str, strlen(str));
     strcpy(parser, str);
 
     for(int m = 0; ; m++, parser = 0)
@@ -261,6 +249,8 @@ int MoveConductor(char* str){
         }
     }
 
+    free(parser);
+
 }
 
 NODE* CreateNode(NODE* node, char* childname){
@@ -269,9 +259,9 @@ NODE* CreateNode(NODE* node, char* childname){
         if(node->pnNodes[k] == 0){
 
             //Allocate/create new node.
-            NODE* childnode = (NODE*) malloc(sizeof(NODE));
+            NODE* childnode = (NODE*) calloc(1, sizeof(NODE));
             //Make room for name.
-            childnode->pszName = malloc(strlen(childname) * sizeof(char)+1);
+            childnode->pszName = calloc(1, strlen(childname) * sizeof(char)+1);
             //Move name.
             strcpy(childnode->pszName, childname);
             //Place at free position.
@@ -289,6 +279,8 @@ void Delete(char* nodename){
     if(strcmp(nodename, (char*) "root") == 0){
         conductor = root;
         DeleteChildren(root);
+        //free(root->pszName);
+        root->pszName = 0;
         root = 0;
         return;
     }
@@ -296,25 +288,29 @@ void Delete(char* nodename){
     int childpos = 0;
     childpos = ChildExists(conductor, nodename);
 
-    if(childpos >= 0){
-        free(conductor->pnNodes[childpos]);
 
-    }
+     if(childpos >= 0) {
 
-    if(!IsEmpty(conductor->pnNodes[childpos])){
-        DeleteChildren(conductor->pnNodes[childpos]);
-    } else{
-        //free(conductor->pnNodes[childpos]);
-        conductor->pnNodes[childpos] = 0;
-    }
+         // Free all data from nodes, and then nodes.
 
-    /*
-    if (!is_empty(conductor)) {
-        if (childpos >= 0) {
-            free(conductor->pnNodes[childpos]);
-            conductor->pnNodes[childpos] = 0;
-        }
-    }*/
+         if (!IsEmpty(conductor->pnNodes[childpos])) {
+
+             DeleteChildren(conductor->pnNodes[childpos]);
+
+         } else {
+
+             if (conductor->pnNodes[childpos]->pszString != 0) {
+
+                 free(conductor->pnNodes[childpos]->pszString);
+                 conductor->pnNodes[childpos]->pszString = 0;
+
+             } else if (conductor->pnNodes[childpos]->ulIntVal != 0) {
+
+             }
+             //free(conductor->pnNodes[childpos]);
+             conductor->pnNodes[childpos] = 0;
+         }
+     }
 
 }
 
@@ -328,14 +324,12 @@ void SetNumber(NODE* node, ULONG number)
 void SetString(NODE* node, char* str)
 {
     char *nodestring;
-    nodestring = malloc(strlen(str) * sizeof(char)+1);
+    nodestring = calloc(1, strlen(str) * sizeof(char)+1);
 
-    //memcpy(nodestring, str, strlen(str) + 1);
-
-    strcpy(nodestring, str);
-    //printf("\n%zd\n", strlen(nodestring));
+    strncpy(nodestring, str, strlen(str));
 
     node->pszString = nodestring;
+
 
 }
 
@@ -455,7 +449,6 @@ void PrintNodeTree(NODE* rootprint){
 
 }
 
-
 void DeleteChildren(NODE* rootfree) {
 
     if (rootfree == 0)
@@ -469,24 +462,3 @@ void DeleteChildren(NODE* rootfree) {
         }
     }
 }
-
-/*
-void nodetest(){
-
-//root = malloc(sizeof(NODE));
-//root->pszName = "root";
-
-//root->pnNodes[0] = malloc(sizeof(NODE));
-//root->pnNodes[1] = malloc(sizeof(NODE));
-
-//root->pnNodes[0]->pszName = "firstchild";
-//root->pnNodes[1]->pszName = "secondchild";
-
-printf("%s and %s are children of %s\n",
-    root->pnNodes[0]->pszName,
-    root->pnNodes[1]->pszName,
-    root->pszName);
-
-}
-
-*/
