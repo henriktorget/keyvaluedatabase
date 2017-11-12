@@ -4,7 +4,7 @@
 
 #include "parser.h"
 
-char* trimwhitespace(char *str){
+char* TrimWhitespace(char *str){
 
     char *end;
 
@@ -25,7 +25,7 @@ char* trimwhitespace(char *str){
 
 }
 
-int isNumber(char* str){
+int IsNumber(char* str){
 
     if(isdigit((unsigned char)*str))
     {

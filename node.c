@@ -5,7 +5,7 @@
 #include "node.h"
 #include "parser.h"
 
-void createNodeTree(char* filename)
+void CreateNodeTree(char* filename)
 {
     // Create initial root node, name it.
     root = (NODE*) malloc(sizeof(NODE));
@@ -15,7 +15,7 @@ void createNodeTree(char* filename)
     ssize_t read;
 
     // Open file read only
-    f = fopen("data.txt", "r");
+    f = fopen(filename, "r");
     if (f == 0)
         exit(EXIT_FAILURE);
 
@@ -39,7 +39,7 @@ void createNodeTree(char* filename)
 
             // Trim string whitespace around '='
 
-            token = trimwhitespace(token);
+            token = TrimWhitespace(token);
 
             // Token is on the left side of '='
             if(i == 0){
@@ -65,7 +65,7 @@ void createNodeTree(char* filename)
 
                     // See if child exists, returns position where in array if it does.
                     // If number is negative it needs to do things accordingly.
-                    nodecheck = childexists(conductor, nodename);
+                    nodecheck = ChildExists(conductor, nodename);
 
                     if(nodecheck >= 0 ){
 
@@ -77,11 +77,11 @@ void createNodeTree(char* filename)
                         //printf("Node '%s' not found in '%s', creating it.\n", nodename,
                         //        conductor->pszName);
 
-                        conductor = createnode(conductor, nodename);
+                        conductor = CreateNode(conductor, nodename);
 
                     } else if(nodecheck == -2){
                         //Cant find node. Create new node. With name. Move conductor to it.
-                        conductor = createnode(conductor, nodename);
+                        conductor = CreateNode(conductor, nodename);
 
                     } else if(nodecheck == -3) {
 
@@ -103,19 +103,19 @@ void createNodeTree(char* filename)
                 strcpy(nodearg, token);
 
                 // Check if nodearg is a number. Returns 1 if number, returns 0 if string.
-                type = isNumber(nodearg);
+                type = IsNumber(nodearg);
 
                 if(type == 1) {
 
                     // String to ULONG
                     ULONG ulong = strtoul(nodearg, 0, 10);
 
-                    setNumber(conductor, ulong);
+                    SetNumber(conductor, ulong);
 
                 }
                 else if(type == 0) {
 
-                    setString(conductor, nodearg);
+                    SetString(conductor, nodearg);
 
                 }
 
@@ -140,7 +140,7 @@ void createNodeTree(char* filename)
 
 }
 
-int childexists(NODE* node, char* childname)
+int ChildExists(NODE* node, char* childname)
 {
 
     int strcmpVal;
@@ -192,7 +192,7 @@ int childexists(NODE* node, char* childname)
     return -4;
 }
 
-int is_empty(NODE* node){
+int IsEmpty(NODE* node){
 
     int emptycount = 0;
 
@@ -230,7 +230,7 @@ int is_empty(NODE* node){
 };
  */
 
-int moveconductor(char* str){
+int MoveConductor(char* str){
 
     char *nodename, *savept, *parser;
     int nodepos;
@@ -252,7 +252,7 @@ int moveconductor(char* str){
         if(*nodename == '*')
             return -1;
 
-        nodepos = childexists(conductor, nodename);
+        nodepos = ChildExists(conductor, nodename);
 
         if(nodepos >= 0){
             conductor = conductor->pnNodes[nodepos];
@@ -264,7 +264,7 @@ int moveconductor(char* str){
 
 }
 
-NODE* createnode(NODE* node, char* childname){
+NODE* CreateNode(NODE* node, char* childname){
 
     for(int k = 0; k < MAX_NODES; k++){
         if(node->pnNodes[k] == 0){
@@ -294,14 +294,14 @@ void Delete(char* nodename){
         return;
     }
 
-    int childpos = childexists(conductor, nodename);
+    int childpos = ChildExists(conductor, nodename);
 
     if(childpos >= 0){
         free(conductor->pnNodes[childpos]);
 
     }
 
-    if(!is_empty(conductor->pnNodes[childpos])){
+    if(!IsEmpty(conductor->pnNodes[childpos])){
         DeleteChildren(conductor->pnNodes[childpos]);
     } else{
         //free(conductor->pnNodes[childpos]);
@@ -318,14 +318,14 @@ void Delete(char* nodename){
 
 }
 
-void setNumber(NODE* node, ULONG number)
+void SetNumber(NODE* node, ULONG number)
 {
 
     node->ulIntVal = number;
 
 }
 
-void setString(NODE* node, char* str)
+void SetString(NODE* node, char* str)
 {
     char *nodestring;
 
@@ -347,7 +347,7 @@ int HasType(NODE* node){
 int GetType(char* string)
 {
 
-    moveconductor(string);
+    MoveConductor(string);
     /*
     char *nodenames, *savert, *parsers;
     int nodepos;
@@ -396,7 +396,7 @@ int GetType(char* string)
 
 int GetInt(char* str){
 
-    moveconductor(str);
+    MoveConductor(str);
 
     return (int) conductor->ulIntVal;
 
@@ -404,14 +404,14 @@ int GetInt(char* str){
 }
 
 char* GetString(char* str){
-    moveconductor(str);
+    MoveConductor(str);
 
     return conductor->pszString;
 }
 
 void Enumerate(char* str){
 
-    if (moveconductor(str) == -1){
+    if (MoveConductor(str) == -1){
 
         // Conductor is at asterix.
         // This position/folder should not have a value assigned
@@ -442,14 +442,14 @@ void Enumerate(char* str){
 }
 
 char* GetText(char* string, char* lang){
-    moveconductor("strings");
+    MoveConductor("strings");
 
-    int childpos = childexists(conductor, lang);
+    int childpos = ChildExists(conductor, lang);
     //printf("childpos: %d\n", childpos);
 
     if (childpos >= 0){
         conductor = conductor->pnNodes[childpos];
-        childpos = childexists(conductor, string);
+        childpos = ChildExists(conductor, string);
         if(childpos >= 0){
             conductor = conductor->pnNodes[childpos];
         }
@@ -461,7 +461,7 @@ char* GetText(char* string, char* lang){
 
 }
 
-void printnodetree(NODE* rootprint){
+void PrintNodeTree(NODE* rootprint){
 
 
   for(int l = 0; l < MAX_NODES; l++){
@@ -469,7 +469,7 @@ void printnodetree(NODE* rootprint){
     if(rootprint->pnNodes[l] != 0){
 
         printf("%s ", rootprint->pnNodes[l]->pszName);
-        printnodetree(rootprint->pnNodes[l]);
+        PrintNodeTree(rootprint->pnNodes[l]);
 
     } else {
         //printf("\n");

@@ -10,16 +10,14 @@ int main(void){
 
 /**
  *  Jeg har laget eksempler med alle funnksjoner som er i oppgaven.
- *  
+ *  Kjør CreateNodeTree() med egene filnavn om du har tester.
  */
 
     // Del 1:
 
     printf("Del 1:\n");
 
-    createNodeTree("data.txt");
-
-    printnodetree(root);
+    CreateNodeTree("data.txt");
 
     printf("\tSo far so good...\n\n");
 
@@ -50,7 +48,7 @@ int main(void){
 
     //Enumerate("strings.no.*");
 
-    printf("\n");
+    printf("\n\n");
 
     // Del 4:
 
@@ -58,11 +56,11 @@ int main(void){
 
     printf("\tDelete(): ");
 
-    moveconductor("config.update");
+    MoveConductor("config.update");
 
     Delete("interval");
 
-    int ret = childexists(conductor, "interval");
+    int ret = ChildExists(conductor, "interval");
 
         if (ret < 0)
             printf("Has been deleted\n");
@@ -81,7 +79,7 @@ int main(void){
             ,GetText("button_cancel", "en"));
 
     //Lists folders
-    //printnodetree(root);
+    PrintNodeTree(root);
 
     // Free allocated space.
     Delete("root");

@@ -10,13 +10,11 @@
 
 #include <string.h>
 
-// Splits string in array of words divided by '.'
-char** splitInPeriod(char* str);
 
 // Removes whitespaces from each side of string.
-char *trimwhitespace(char* str);
+char *TrimWhitespace(char* str);
 
 // Checks wether a string is a number or not.
-int isNumber(char* str);
+int IsNumber(char* str);
 
 #endif //KEYVALUE_PARSER_H
