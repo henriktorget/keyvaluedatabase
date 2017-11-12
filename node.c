@@ -174,13 +174,18 @@ int childexists(NODE* node, char* childname)
         }
 
     }
-
+/*
     if(emptycount == MAX_NODES){
 
         // All nodes are empty,
         return -1;
 
-    } else if(emptycount < MAX_NODES){
+    }*/
+
+    if(is_empty(node)) {
+        return -1;
+    }
+    else if(emptycount < MAX_NODES){
 
         // If it went through all nonempty childnodes and there is room for a new one.
         return -2;
@@ -198,11 +203,40 @@ int childexists(NODE* node, char* childname)
 
 int is_empty(NODE* node){
 
-    
+    int emptycount = 0;
 
+    for (int i = 0; i < MAX_NODES; i++) {
+
+        if (node->pnNodes[i] != 0) {
+
+            emptycount++;
+
+        }
+    }
+
+    if(emptycount == 0)
+        return 1;
+    else
+        return 0;
 }
 
-void moveconductor(char* str){
+int moveone(char* str){
+
+    int childExistsReturnVal = 0;
+    childExistsReturnVal = childexists(conductor, str);
+
+    if (childExistsReturnVal >= 0)
+    {
+        conductor = conductor->pnNodes[childExistsReturnVal];
+        return 1;
+    }
+    else if(childExistsReturnVal < 0) {
+        return childExistsReturnVal;
+    }
+
+};
+
+int moveconductor(char* str){
 
     char *nodename, *savept, *parser;
     int nodepos;
@@ -221,11 +255,14 @@ void moveconductor(char* str){
         if(nodename == 0)
             break;
 
+        if(*nodename == '*')
+            return -1;
+
         nodepos = childexists(conductor, nodename);
 
         if(nodepos >= 0){
             conductor = conductor->pnNodes[nodepos];
-            printf("Conductor: %s\n", conductor->pszName);
+            //printf("Conductor: %s\n", conductor->pszName);
         } else if (nodename < 0) {
             printf("Nodepos returned %d\n", nodepos);
         }
@@ -253,6 +290,12 @@ NODE* createnode(NODE* node, char* childname){
     return 0;
 }
 
+void Delete(NODE* node){
+    node = 0;
+    freetree(node);
+
+}
+
 void setNumber(NODE* node, ULONG number)
 {
 
@@ -268,6 +311,15 @@ void setString(NODE* node, char* str)
 
     node->pszString = nodestring;
 
+}
+
+int HasType(NODE* node){
+
+    if(node->ulIntVal != 0 || node->pszString != 0){
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int GetType(char* string)
@@ -303,14 +355,19 @@ int GetType(char* string)
     }
      */
 
-    printf("Int = %lu \n", conductor->ulIntVal);
-    printf("String = %s \n", conductor->pszString);
+    //printf("Int = %lu \n", conductor->ulIntVal);
+    //printf("String = %s \n", conductor->pszString);
 
-    if(conductor->ulIntVal != 0)
-        return 1;
+    if(HasType(conductor)) {
 
-    else if(conductor->pszString != 0)
-        return 0;
+        if (conductor->ulIntVal != 0)
+            return 1;
+
+        else if (conductor->pszString != 0)
+            return 0;
+
+    }
+
     else
         return -1;
 }
@@ -328,6 +385,56 @@ char* GetString(char* str){
     moveconductor(str);
 
     return conductor->pszString;
+}
+
+void Enumerate(char* str){
+
+    if (moveconductor(str) == -1){
+
+        // Conductor is at asterix.
+        // This position/folder should not have a value assigned
+        if (HasType(conductor) == 0) {
+
+            for(int i = 0; i < MAX_NODES; i++) {
+                if(conductor->pnNodes[i] != 0)
+                    printf("%s: ", conductor->pnNodes[i]->pszName);
+
+                if (conductor->pnNodes[i]->pszString != 0) {
+
+                    printf("%s\n", conductor->pnNodes[i]->pszString);
+
+                } else if (conductor->pnNodes[i]->ulIntVal != 0) {
+
+                printf("%lu\n", conductor->pnNodes[i]->ulIntVal);
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+char* GetText(char* string, char* lang){
+    moveconductor("strings");
+
+    int childpos = childexists(conductor, lang);
+    //printf("childpos: %d\n", childpos);
+
+    if (childpos >= 0){
+        conductor = conductor->pnNodes[childpos];
+        childpos = childexists(conductor, string);
+        if(childpos >= 0){
+            conductor = conductor->pnNodes[childpos];
+        }
+        return conductor->pszString;
+    } else {
+        printf("ChildExists() returned: %d \n", childpos);
+    }
+
+
 }
 
 void printnodetree(NODE* rootprint){
@@ -353,10 +460,15 @@ void freetree(NODE* rootfree){
     if (rootfree == 0)
         return;
 
-    for(int i = 0; i < MAX_NODES; i++)
-        freetree(rootfree->pnNodes[i]);
+    for(int i = 0; i < MAX_NODES; i++) {
+        if(rootfree->pnNodes[i] != 0) {
+            freetree(rootfree->pnNodes[i]);
+        }
+    }
 
     free(rootfree);
+    rootfree = 0;
+
 
 }
 

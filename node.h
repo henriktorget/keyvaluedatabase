@@ -46,20 +46,29 @@ int is_empty(NODE* node);
 
 //Traverses conductor along path like "config.update.interval".
 // When this function is finished, conductor points at "interval" in this case.
-void moveconductor(char* str);
+int moveconductor(char* str);
 
 // This function return pointer to child with name nodename.
 // If the child is null.
 NODE* findnode(char *nodename);
 
+// Finds node by name and moves to it. Does not set conductor to root.
+int moveone(char* str);
+
 //Create child at given node. Return new node.
 NODE* createnode(NODE* node, char* childname);
+
+// Deletes node with children.
+void Delete(NODE* node);
 
 //Sets number to given node.
 void setNumber(NODE* node, ULONG number);
 
 //Sets string to given node.
 void setString(NODE* node, char* str);
+
+// Returns 1 if node has a value assigned. 0 if not. -1 if both.
+int HasType(NODE* node);
 
 //Get wether node stores string or int.
 int GetType(char* string);
@@ -69,6 +78,12 @@ int GetInt(char* str);
 
 // Get string
 char* GetString(char* str);
+
+// Enumerate
+void Enumerate(char* str);
+
+//GetText
+char* GetText(char* string, char* lang);
 
 //Recursive print function
 void printnodetree(NODE* rootprint);
