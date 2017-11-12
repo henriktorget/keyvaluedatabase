@@ -196,6 +196,43 @@ int childexists(NODE* node, char* childname)
     return -4;
 }
 
+int is_empty(NODE* node){
+
+    
+
+}
+
+void moveconductor(char* str){
+
+    char *nodename, *savept, *parser;
+    int nodepos;
+
+
+    conductor = root;
+
+    parser = malloc(sizeof(str));
+    strcpy(parser, str);
+
+    for(int m = 0; ; m++, parser = 0)
+    {
+
+        nodename = strtok_r(parser, ".", &savept);
+
+        if(nodename == 0)
+            break;
+
+        nodepos = childexists(conductor, nodename);
+
+        if(nodepos >= 0){
+            conductor = conductor->pnNodes[nodepos];
+            printf("Conductor: %s\n", conductor->pszName);
+        } else if (nodename < 0) {
+            printf("Nodepos returned %d\n", nodepos);
+        }
+    }
+
+}
+
 NODE* createnode(NODE* node, char* childname){
 
     for(int k = 0; k < MAX_NODES; k++){
@@ -235,6 +272,9 @@ void setString(NODE* node, char* str)
 
 int GetType(char* string)
 {
+
+    moveconductor(string);
+    /*
     char *nodenames, *savert, *parsers;
     int nodepos;
 
@@ -261,6 +301,7 @@ int GetType(char* string)
             printf("Nodepos returned %d\n", nodepos);
         }
     }
+     */
 
     printf("Int = %lu \n", conductor->ulIntVal);
     printf("String = %s \n", conductor->pszString);
@@ -272,6 +313,21 @@ int GetType(char* string)
         return 0;
     else
         return -1;
+}
+
+int GetInt(char* str){
+
+    moveconductor(str);
+
+    return (int) conductor->ulIntVal;
+
+
+}
+
+char* GetString(char* str){
+    moveconductor(str);
+
+    return conductor->pszString;
 }
 
 void printnodetree(NODE* rootprint){

@@ -41,6 +41,13 @@ int childexists(NODE* node, char* childname);
 //Checks if there is
 //int fullofchildren(NODE* node);
 
+// Checks if a node has any children at all.
+int is_empty(NODE* node);
+
+//Traverses conductor along path like "config.update.interval".
+// When this function is finished, conductor points at "interval" in this case.
+void moveconductor(char* str);
+
 // This function return pointer to child with name nodename.
 // If the child is null.
 NODE* findnode(char *nodename);
@@ -57,8 +64,13 @@ void setString(NODE* node, char* str);
 //Get wether node stores string or int.
 int GetType(char* string);
 
-//Recursive print function
+//Get int
+int GetInt(char* str);
 
+// Get string
+char* GetString(char* str);
+
+//Recursive print function
 void printnodetree(NODE* rootprint);
 
 //Frees memory from node specified.
