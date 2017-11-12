@@ -348,37 +348,6 @@ int GetType(char* string)
 {
 
     MoveConductor(string);
-    /*
-    char *nodenames, *savert, *parsers;
-    int nodepos;
-
-
-    conductor = root;
-
-    parsers = malloc(sizeof(string));
-    strcpy(parsers, string);
-
-    for(int m = 0; ; m++, parsers = 0)
-    {
-
-        nodenames = strtok_r(parsers, ".", &savert);
-
-        if(nodenames == 0)
-            break;
-
-        nodepos = childexists(conductor, nodenames);
-
-        if(nodepos >= 0){
-            conductor = conductor->pnNodes[nodepos];
-            printf("Conductor: %s\n", conductor->pszName);
-        } else if (nodename < 0) {
-            printf("Nodepos returned %d\n", nodepos);
-        }
-    }
-     */
-
-    //printf("Int = %lu \n", conductor->ulIntVal);
-    //printf("String = %s \n", conductor->pszString);
 
     if(HasType(conductor)) {
 
@@ -419,14 +388,17 @@ void Enumerate(char* str){
 
             for(int i = 0; i < MAX_NODES; i++) {
                 if (conductor->pnNodes[i] != 0) {
-                    printf("%s: ", conductor->pnNodes[i]->pszName);
-
+                    //Does it have a stringvalue?
                     if (conductor->pnNodes[i]->pszString != 0) {
 
+                        printf("%s: ", conductor->pnNodes[i]->pszName);
                         printf("%s\n", conductor->pnNodes[i]->pszString);
 
-                    } else if (conductor->pnNodes[i]->ulIntVal != 0) {
+                    }
+                    //Or does it have an int? If neither, dont print because its a folder.
+                    else if (conductor->pnNodes[i]->ulIntVal != 0) {
 
+                        printf("%s: ", conductor->pnNodes[i]->pszName);
                         printf("%lu\n", conductor->pnNodes[i]->ulIntVal);
 
                     }

@@ -79,7 +79,7 @@ void Enumerate(char* str);
 char* GetText(char* string, char* lang);
 
 //Recursive print function
-void PrintNodetree(NODE* rootprint);
+void PrintNodeTree(NODE* rootprint);
 
 //Frees memory from node specified.
 //void freetree(NODE* rootfree);

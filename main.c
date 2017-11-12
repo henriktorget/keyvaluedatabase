@@ -42,9 +42,9 @@ int main(void){
 
     printf("\tEnumerate(): \n");
 
-    Enumerate("config.*");
+    //Enumerate("config.*");
 
-    //Enumerate("strings.en.*");
+    Enumerate("strings.en.*");
 
     //Enumerate("strings.no.*");
 
