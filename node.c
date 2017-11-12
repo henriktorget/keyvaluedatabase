@@ -271,7 +271,7 @@ NODE* CreateNode(NODE* node, char* childname){
             //Allocate/create new node.
             NODE* childnode = (NODE*) malloc(sizeof(NODE));
             //Make room for name.
-            childnode->pszName = malloc(sizeof(childname));
+            childnode->pszName = malloc(strlen(childname) * sizeof(char)+1);
             //Move name.
             strcpy(childnode->pszName, childname);
             //Place at free position.
@@ -293,7 +293,8 @@ void Delete(char* nodename){
         return;
     }
 
-    int childpos = ChildExists(conductor, nodename);
+    int childpos = 0;
+    childpos = ChildExists(conductor, nodename);
 
     if(childpos >= 0){
         free(conductor->pnNodes[childpos]);
