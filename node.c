@@ -211,7 +211,7 @@ int is_empty(NODE* node){
         return 0;
 }
 
-int moveone(char* str){
+/*int moveone(char* str){
 
     int childExistsReturnVal = 0;
     childExistsReturnVal = childexists(conductor, str);
@@ -225,7 +225,10 @@ int moveone(char* str){
         return childExistsReturnVal;
     }
 
+    return;
+
 };
+ */
 
 int moveconductor(char* str){
 

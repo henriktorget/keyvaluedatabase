@@ -50,10 +50,10 @@ int moveconductor(char* str);
 
 // This function return pointer to child with name nodename.
 // If the child is null.
-NODE* findnode(char *nodename);
+//NODE* findnode(char *nodename);
 
 // Finds node by name and moves to it. Does not set conductor to root.
-int moveone(char* str);
+//int moveone(char* str);
 
 //Create child at given node. Return new node.
 NODE* createnode(NODE* node, char* childname);
