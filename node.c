@@ -250,6 +250,7 @@ int MoveConductor(char* str){
     }
 
     free(parser);
+    return 0;
 
 }
 
@@ -359,6 +360,8 @@ int GetType(char* string)
 
     else
         return -1;
+
+    return 0;
 }
 
 int GetInt(char* str){
@@ -428,7 +431,7 @@ char* GetText(char* string, char* lang){
         printf("ChildExists() returned: %d \n", childpos);
     }
 
-
+    return 0;
 }
 
 void PrintNodeTree(NODE* rootprint){
