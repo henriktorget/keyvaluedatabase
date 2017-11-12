@@ -237,7 +237,7 @@ int MoveConductor(char* str){
 
     conductor = root;
 
-    parser = malloc(sizeof(str));
+    parser = malloc(strlen(str) * sizeof(char) +1);
     strcpy(parser, str);
 
     for(int m = 0; ; m++, parser = 0)
